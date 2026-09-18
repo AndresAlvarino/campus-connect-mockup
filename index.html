@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Campus Connect — Mockup Fase 3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1D2142;
+    --ink-2:#2A2E5C;
+    --marigold:#F2A93B;
+    --marigold-dark:#D98F22;
+    --teal:#2FA792;
+    --coral:#E1574F;
+    --paper:#F4F3FA;
+    --surface:#FFFFFF;
+    --border:#E4E3EE;
+    --text:#24243A;
+    --muted:#767892;
+    --font: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+    --bg-page:#EEEDF6;
+    --chrome-text:#24243A;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --bg-page:#15162A;
+      --chrome-text:#EDEDF6;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg-page:#15162A;
+    --chrome-text:#EDEDF6;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:var(--font);
+    background:var(--bg-page);
+    color:var(--chrome-text);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .device-wrap{
+    position:relative;
+    width:375px;
+    max-width:92vw;
+  }
+  .device{
+    width:100%;
+    aspect-ratio:375/812;
+    background:var(--paper);
+    border-radius:38px;
+    border:8px solid var(--ink);
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 30px 60px -20px rgba(29,33,66,0.45);
+    display:flex;
+    flex-direction:column;
+  }
+  .notch{
+    position:absolute;
+    top:8px; left:50%; transform:translateX(-50%);
+    width:120px; height:22px;
+    background:var(--ink);
+    border-radius:0 0 16px 16px;
+    z-index:20;
+  }
+  .screen{
+    position:absolute;
+    inset:0;
+    display:none;
+    flex-direction:column;
+    color:var(--text);
+    animation:fadein .22s ease;
+  }
+  .screen.active{ display:flex; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  .statusbar{ height:34px; flex-shrink:0; }
+
+  /* ---- App bar ---- */
+  .appbar{
+    padding:6px 20px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-shrink:0;
+  }
+  .appbar .title{ font-size:19px; font-weight:800; letter-spacing:-0.01em; }
+  .appbar .sub{ font-size:12px; color:var(--muted); margin-top:2px; }
+  .icon-btn{
+    width:34px; height:34px; border-radius:50%;
+    background:var(--surface); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+
+  .content{
+    flex:1;
+    overflow-y:auto;
+    padding:0 20px 90px;
+  }
+  .content::-webkit-scrollbar{ display:none; }
+
+  /* ---- Bottom nav ---- */
+  .navbar{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:76px;
+    background:var(--surface);
+    border-top:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+    padding-bottom:10px;
+    z-index:15;
+  }
+  .navitem{
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    color:var(--muted);
+    font-size:10.5px;
+    font-weight:600;
+    background:none; border:none; cursor:pointer;
+    width:64px;
+    padding:6px 0 0;
+  }
+  .navitem svg{ width:21px; height:21px; }
+  .navitem.active{ color:var(--ink); }
+  .navitem .pill{
+    width:28px; height:3px; border-radius:3px; background:transparent; margin-top:1px;
+  }
+  .navitem.active .pill{ background:var(--marigold); }
+
+  /* ---- Buttons ---- */
+  .btn-primary{
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    border-radius:14px;
+    padding:15px 20px;
+    font-family:var(--font);
+    font-weight:700;
+    font-size:14.5px;
+    width:100%;
+    cursor:pointer;
+    transition:transform .12s ease, background .12s ease;
+  }
+  .btn-primary:hover{ background:var(--ink-2); }
+  .btn-primary:active{ transform:scale(0.97); }
+  .btn-ghost{
+    background:transparent;
+    color:var(--ink);
+    border:1.5px solid var(--border);
+    border-radius:14px;
+    padding:13px 20px;
+    font-family:var(--font);
+    font-weight:700;
+    font-size:14px;
+    width:100%;
+    cursor:pointer;
+  }
+  .btn-ghost:active{ transform:scale(0.97); }
+
+  input.field{
+    width:100%;
+    border:1.5px solid var(--border);
+    background:var(--surface);
+    border-radius:13px;
+    padding:13px 14px;
+    font-family:var(--font);
+    font-size:13.5px;
+    color:var(--text);
+    margin-bottom:12px;
+  }
+  input.field:focus{ outline:2px solid var(--marigold); outline-offset:1px; }
+
+  /* ---- Cards ---- */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:14px 15px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:11px;
+    cursor:pointer;
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .card:active{ background:#FAFAFD; }
+  .accent-strip{
+    width:4px; align-self:stretch; border-radius:4px; flex-shrink:0;
+  }
+  .card-body{ flex:1; min-width:0; }
+  .card-title{ font-size:14px; font-weight:700; }
+  .card-meta{ font-size:11.5px; color:var(--muted); margin-top:2px; }
+  .chev{ color:var(--muted); flex-shrink:0; }
+
+  .tag{
+    display:inline-flex; align-items:center; gap:4px;
+    font-size:10.5px; font-weight:700;
+    padding:3px 9px; border-radius:999px;
+  }
+  .tag-marigold{ background:#FCEBD1; color:var(--marigold-dark); }
+  .tag-teal{ background:#DFF3F0; color:#1C7D6C; }
+  .tag-coral{ background:#FBE1DF; color:#C23F38; }
+  .tag-muted{ background:#EDEDF4; color:var(--muted); }
+
+  /* stat row */
+  .stat-row{ display:flex; gap:10px; margin-bottom:16px; }
+  .stat{
+    flex:1; background:var(--ink); color:#fff; border-radius:16px; padding:13px 12px;
+  }
+  .stat.alt{ background:var(--surface); color:var(--text); border:1px solid var(--border); }
+  .stat .num{ font-size:19px; font-weight:800; }
+  .stat .lbl{ font-size:10.5px; opacity:.8; margin-top:2px; font-weight:600; }
+
+  .section-title{
+    font-size:13px; font-weight:700; color:var(--text);
+    margin:18px 0 10px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .section-title .link{ font-size:11.5px; color:var(--marigold-dark); font-weight:700; }
+
+  /* chips */
+  .chip-row{ display:flex; gap:8px; margin-bottom:14px; overflow-x:auto; padding-bottom:2px; }
+  .chip-row::-webkit-scrollbar{display:none;}
+  .chip{
+    flex-shrink:0;
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:12.5px; font-weight:700;
+    background:var(--surface); color:var(--muted);
+    border:1px solid var(--border);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .chip.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
+
+  /* day tabs */
+  .daytabs{ display:flex; gap:6px; margin-bottom:16px; }
+  .daytab{
+    flex:1; text-align:center; padding:9px 0; border-radius:12px;
+    font-size:12px; font-weight:700; color:var(--muted);
+    background:var(--surface); border:1px solid var(--border); cursor:pointer;
+  }
+  .daytab .d{ font-size:14px; display:block; margin-top:2px; }
+  .daytab.active{ background:var(--marigold); color:var(--ink); border-color:var(--marigold); }
+
+  .checkbox{
+    width:21px; height:21px; border-radius:7px; border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    background:var(--surface);
+  }
+  .checkbox.checked{ background:var(--teal); border-color:var(--teal); }
+  .task-done .card-title{ text-decoration:line-through; color:var(--muted); }
+
+  .empty-state{
+    text-align:center; padding:52px 20px 20px; color:var(--muted);
+  }
+  .empty-state .circ{
+    width:56px; height:56px; border-radius:50%; background:var(--surface); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 14px;
+  }
+  .empty-state .t{ font-weight:700; color:var(--text); font-size:14px; margin-bottom:4px; }
+  .empty-state .s{ font-size:12px; line-height:1.5; }
+
+  /* detail screen */
+  .back-row{ display:flex; align-items:center; gap:10px; padding:6px 20px 6px; flex-shrink:0; }
+  .back-row .lbl{ font-size:13px; font-weight:700; color:var(--muted); }
+  .detail-title{ font-size:20px; font-weight:800; margin:10px 0 6px; line-height:1.25; }
+  .detail-block{ margin-bottom:16px; }
+  .detail-block .k{ font-size:11px; font-weight:700; color:var(--muted); margin-bottom:4px; }
+  .detail-block .v{ font-size:13.5px; line-height:1.55; }
+  .divider{ height:1px; background:var(--border); margin:16px 0; }
+
+  /* login screen */
+  .login-screen{ justify-content:center; padding:0 26px; }
+  .brand{ text-align:center; margin-bottom:34px; }
+  .brand .mark{
+    width:58px; height:58px; border-radius:18px; background:var(--ink);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 14px;
+  }
+  .brand h2{ font-size:21px; font-weight:800; }
+  .brand p{ font-size:12.5px; color:var(--muted); margin-top:5px; }
+</style>
+</head>
+<body>
+
+<div class="device-wrap">
+  <div class="device" id="device">
+    <div class="notch"></div>
+
+    <!-- 1. LOGIN -->
+    <div class="screen login-screen active" data-screen="login">
+      <div class="statusbar"></div>
+      <div class="brand">
+        <div class="mark">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 4l9 5-9 5-9-5Z" stroke="#F2A93B" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 11.5V16c0 1.1 2.24 2 5 2s5-.9 5-2v-4.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2>Campus Connect</h2>
+        <p>Tu horario, tareas y avisos<br>en un solo lugar</p>
+      </div>
+      <input class="field" type="text" placeholder="Correo institucional" readonly>
+      <input class="field" type="text" placeholder="Contraseña" readonly>
+      <button class="btn-primary" onclick="go('dashboard')">Ingresar</button>
+      <p style="text-align:center; font-size:11.5px; color:var(--muted); margin-top:14px;">Acceso simulado con datos ficticios</p>
+    </div>
+
+    <!-- 2. DASHBOARD -->
+    <div class="screen" data-screen="dashboard">
+      <div class="statusbar"></div>
+      <div class="appbar">
+        <div>
+          <div class="title">Hola, Valentina</div>
+          <div class="sub">Martes, 14 de octubre</div>
+        </div>
+        <div class="icon-btn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 3a5 5 0 00-5 5v3.2c0 .5-.2 1-.6 1.4L5 14h14l-1.4-1.4a2 2 0 01-.6-1.4V8a5 5 0 00-5-5Z" stroke="#1D2142" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 17a2.5 2.5 0 005 0" stroke="#1D2142" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      </div>
+      <div class="content">
+        <div class="stat-row">
+          <div class="stat">
+            <div class="num">3</div>
+            <div class="lbl">Clases hoy</div>
+          </div>
+          <div class="stat alt">
+            <div class="num">2</div>
+            <div class="lbl">Tareas pendientes</div>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <span>Próxima clase</span>
+        </div>
+        <div class="card" onclick="go('horario')">
+          <div class="accent-strip" style="background:var(--teal)"></div>
+          <div class="card-body">
+            <div class="card-title">Bases de Datos II</div>
+            <div class="card-meta">10:00 – 11:30 · Salón B-204</div>
+          </div>
+          <span class="tag tag-teal">En 40 min</span>
+        </div>
+
+        <div class="section-title">
+          <span>Tareas pendientes</span>
+          <span class="link" onclick="go('tareas')">Ver todas</span>
+        </div>
+        <div class="card" onclick="openDetail('t1')">
+          <div class="accent-strip" style="background:var(--coral)"></div>
+          <div class="card-body">
+            <div class="card-title">Entrega taller de Redes</div>
+            <div class="card-meta">Vence hoy · 11:59 p. m.</div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+        <div class="card" onclick="openDetail('t2')">
+          <div class="accent-strip" style="background:var(--marigold)"></div>
+          <div class="card-body">
+            <div class="card-title">Quiz de Cálculo III</div>
+            <div class="card-meta">Vence mañana · 8:00 a. m.</div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+
+        <div class="section-title">
+          <span>Avisos y eventos</span>
+          <span class="link" onclick="go('eventos')">Ver todos</span>
+        </div>
+        <div class="card" onclick="openDetail('e1')">
+          <div class="accent-strip" style="background:var(--ink)"></div>
+          <div class="card-body">
+            <div class="card-title">Semana de bienestar universitario</div>
+            <div class="card-meta">Inicia el viernes · Plaza central</div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+      </div>
+      <div class="navbar" id="nav-dashboard"></div>
+    </div>
+
+    <!-- 3. HORARIO -->
+    <div class="screen" data-screen="horario">
+      <div class="statusbar"></div>
+      <div class="appbar">
+        <div>
+          <div class="title">Horario</div>
+          <div class="sub">Semana del 13 al 17 de oct.</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="daytabs">
+          <div class="daytab" onclick="setDay(this)"><span>Lun</span><span class="d">13</span></div>
+          <div class="daytab active" onclick="setDay(this)"><span>Mar</span><span class="d">14</span></div>
+          <div class="daytab" onclick="setDay(this)"><span>Mié</span><span class="d">15</span></div>
+          <div class="daytab" onclick="setDay(this)"><span>Jue</span><span class="d">16</span></div>
+          <div class="daytab" onclick="setDay(this)"><span>Vie</span><span class="d">17</span></div>
+        </div>
+
+        <div class="card" onclick="openDetail('c1')">
+          <div class="accent-strip" style="background:var(--teal)"></div>
+          <div class="card-body">
+            <div class="card-title">Bases de Datos II</div>
+            <div class="card-meta">10:00 – 11:30 · Salón B-204 · Ing. Rojas</div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+        <div class="card" onclick="openDetail('c2')">
+          <div class="accent-strip" style="background:var(--marigold)"></div>
+          <div class="card-body">
+            <div class="card-title">Cálculo III</div>
+            <div class="card-meta">12:00 – 1:30 p. m. · Salón A-110</div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+        <div class="card" onclick="openDetail('c3')">
+          <div class="accent-strip" style="background:var(--ink)"></div>
+          <div class="card-body">
+            <div class="card-title">Redes de Computadores</div>
+            <div class="card-meta">3:00 – 5:00 p. m. · Lab. 3</div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+      </div>
+      <div class="navbar" id="nav-horario"></div>
+    </div>
+
+    <!-- 4. TAREAS -->
+    <div class="screen" data-screen="tareas">
+      <div class="statusbar"></div>
+      <div class="appbar">
+        <div>
+          <div class="title">Tareas</div>
+          <div class="sub">4 actividades este mes</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="chip-row">
+          <div class="chip active" onclick="setChip(this,'tareas')">Todas</div>
+          <div class="chip" onclick="setChip(this,'tareas')">Pendientes</div>
+          <div class="chip" onclick="setChip(this,'tareas')">Completadas</div>
+        </div>
+
+        <div class="card" id="task-t1" onclick="openDetail('t1')">
+          <div class="checkbox" onclick="toggleTask(event,'task-t1')"></div>
+          <div class="card-body">
+            <div class="card-title">Entrega taller de Redes</div>
+            <div class="card-meta">Redes de Computadores · Vence hoy</div>
+          </div>
+          <span class="tag tag-coral">Urgente</span>
+        </div>
+        <div class="card" id="task-t2" onclick="openDetail('t2')">
+          <div class="checkbox" onclick="toggleTask(event,'task-t2')"></div>
+          <div class="card-body">
+            <div class="card-title">Quiz de Cálculo III</div>
+            <div class="card-meta">Cálculo III · Vence mañana</div>
+          </div>
+          <span class="tag tag-marigold">Próxima</span>
+        </div>
+        <div class="card task-done" id="task-t3">
+          <div class="checkbox checked" onclick="toggleTask(event,'task-t3')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="card-body">
+            <div class="card-title">Lectura capítulo 4 — Ética</div>
+            <div class="card-meta">Filosofía · Completada</div>
+          </div>
+        </div>
+        <div class="card" id="task-t4" onclick="openDetail('t2')">
+          <div class="checkbox" onclick="toggleTask(event,'task-t4')"></div>
+          <div class="card-body">
+            <div class="card-title">Avance de proyecto final</div>
+            <div class="card-meta">Bases de Datos II · Vence en 5 días</div>
+          </div>
+          <span class="tag tag-muted">Programada</span>
+        </div>
+      </div>
+      <div class="navbar" id="nav-tareas"></div>
+    </div>
+
+    <!-- 5. EVENTOS -->
+    <div class="screen" data-screen="eventos">
+      <div class="statusbar"></div>
+      <div class="appbar">
+        <div>
+          <div class="title">Eventos y avisos</div>
+          <div class="sub">Novedades de la institución</div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="chip-row">
+          <div class="chip active" onclick="setChip(this,'eventos')">Esta semana</div>
+          <div class="chip" onclick="setChip(this,'eventos')">Este mes</div>
+        </div>
+
+        <div id="eventos-list">
+          <div class="card" onclick="openDetail('e1')">
+            <div class="accent-strip" style="background:var(--ink)"></div>
+            <div class="card-body">
+              <div class="card-title">Semana de bienestar universitario</div>
+              <div class="card-meta">Vie. 17 oct · Plaza central</div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+          <div class="card" onclick="openDetail('e2')">
+            <div class="accent-strip" style="background:var(--coral)"></div>
+            <div class="card-body">
+              <div class="card-title">Cierre de matrículas financieras</div>
+              <div class="card-meta">Jue. 16 oct · Aviso administrativo</div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+        </div>
+
+        <div id="eventos-empty" class="empty-state" style="display:none">
+          <div class="circ">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M8 3v3M16 3v3M4 9h16M5 6h14a1 1 0 011 1v12a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1Z" stroke="#767892" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="t">Sin eventos este mes</div>
+          <div class="s">Cuando la institución publique<br>nuevas fechas, aparecerán aquí.</div>
+        </div>
+      </div>
+      <div class="navbar" id="nav-eventos"></div>
+    </div>
+
+    <!-- 6. DETALLE -->
+    <div class="screen" data-screen="detalle">
+      <div class="statusbar"></div>
+      <div class="back-row">
+        <div class="icon-btn" onclick="goBack()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="#1D2142" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="lbl">Volver</span>
+      </div>
+      <div class="content" id="detalle-content" style="padding-top:6px;">
+        <!-- contenido inyectado por JS -->
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const NAV_ITEMS = [
+    {id:'dashboard', label:'Inicio', icon:'<path d="M4 11.5 12 4l8 7.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10.5V19a1 1 0 001 1h10a1 1 0 001-1v-8.5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>'},
+    {id:'horario', label:'Horario', icon:'<rect x="4" y="5" width="16" height="15" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M8 3v4M16 3v4M4 10h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'},
+    {id:'tareas', label:'Tareas', icon:'<rect x="5" y="4" width="14" height="16" rx="2.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.5 11l1.8 1.8L15.5 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>'},
+    {id:'eventos', label:'Eventos', icon:'<path d="M12 21s7-5.2 7-11a7 7 0 10-14 0c0 5.8 7 11 7 11Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.3" stroke="currentColor" stroke-width="1.7"/>'}
+  ];
+
+  function buildNav(activeId){
+    return NAV_ITEMS.map(it => `
+      <button class="navitem ${it.id===activeId?'active':''}" onclick="go('${it.id}')">
+        <svg viewBox="0 0 24 24" fill="none">${it.icon}</svg>
+        <span>${it.label}</span>
+        <span class="pill"></span>
+      </button>`).join('');
+  }
+  document.querySelectorAll('.navbar').forEach(nb=>{
+    const active = nb.id.replace('nav-','');
+    nb.innerHTML = buildNav(active);
+  });
+
+  let history = ['login'];
+
+  function go(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelector(`.screen[data-screen="${id}"]`).classList.add('active');
+    if(history[history.length-1] !== id) history.push(id);
+  }
+
+  function goBack(){
+    history.pop();
+    const prev = history[history.length-1] || 'dashboard';
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelector(`.screen[data-screen="${prev}"]`).classList.add('active');
+  }
+
+  function setDay(el){
+    el.parentElement.querySelectorAll('.daytab').forEach(d=>d.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function setChip(el, group){
+    el.parentElement.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active');
+    if(group === 'eventos'){
+      const isMonth = el.textContent.trim() === 'Este mes';
+      document.getElementById('eventos-list').style.display = isMonth ? 'none' : 'block';
+      document.getElementById('eventos-empty').style.display = isMonth ? 'block' : 'none';
+    }
+  }
+
+  function toggleTask(ev, cardId){
+    ev.stopPropagation();
+    const card = document.getElementById(cardId);
+    const box = card.querySelector('.checkbox');
+    box.classList.toggle('checked');
+    card.classList.toggle('task-done');
+    box.innerHTML = box.classList.contains('checked')
+      ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+      : '';
+  }
+
+  const DETAILS = {
+    t1: {tag:'tag-coral', tagText:'Tarea urgente', title:'Entrega taller de Redes', k1:'Materia', v1:'Redes de Computadores', k2:'Fecha límite', v2:'Hoy, 11:59 p. m.', desc:'Subir el archivo PDF con el diagrama de topología y la configuración de subredes solicitada en la guía 4. Se evalúa direccionamiento IP y justificación de la máscara elegida.'},
+    t2: {tag:'tag-marigold', tagText:'Próxima', title:'Quiz de Cálculo III', k1:'Materia', v1:'Cálculo III', k2:'Fecha límite', v2:'Mañana, 8:00 a. m.', desc:'Evaluación corta sobre series de Taylor y criterios de convergencia. Se realiza al inicio de la clase, duración 20 minutos.'},
+    c1: {tag:'tag-teal', tagText:'Clase', title:'Bases de Datos II', k1:'Horario', v1:'10:00 – 11:30 a. m.', k2:'Lugar', v2:'Salón B-204 · Ing. Rojas', desc:'Tema de hoy: normalización avanzada y diseño de índices. Traer el modelo entidad-relación entregado la semana pasada.'},
+    c2: {tag:'tag-marigold', tagText:'Clase', title:'Cálculo III', k1:'Horario', v1:'12:00 – 1:30 p. m.', k2:'Lugar', v2:'Salón A-110', desc:'Continuación de series de potencias. Habrá quiz corto al inicio de la sesión.'},
+    c3: {tag:'tag-muted', tagText:'Clase', title:'Redes de Computadores', k1:'Horario', v1:'3:00 – 5:00 p. m.', k2:'Lugar', v2:'Laboratorio 3', desc:'Práctica de laboratorio: configuración de subredes en Packet Tracer. Trabajo en parejas.'},
+    e1: {tag:'tag-teal', tagText:'Evento', title:'Semana de bienestar universitario', k1:'Fecha', v1:'Viernes 17 de octubre', k2:'Lugar', v2:'Plaza central', desc:'Actividades de manejo del estrés, feria de servicios de bienestar y jornada deportiva abierta a toda la comunidad estudiantil.'},
+    e2: {tag:'tag-coral', tagText:'Aviso', title:'Cierre de matrículas financieras', k1:'Fecha límite', v1:'Jueves 16 de octubre', k2:'Dependencia', v2:'Oficina de Admisiones', desc:'Último día para realizar el pago de matrícula sin recargo por mora. Después de esta fecha aplica un incremento del 10%.'}
+  };
+
+  function openDetail(key){
+    const d = DETAILS[key];
+    const c = document.getElementById('detalle-content');
+    c.innerHTML = `
+      <span class="tag ${d.tag}">${d.tagText}</span>
+      <div class="detail-title">${d.title}</div>
+      <div class="detail-block">
+        <div class="k">${d.k1}</div>
+        <div class="v">${d.v1}</div>
+      </div>
+      <div class="detail-block">
+        <div class="k">${d.k2}</div>
+        <div class="v">${d.v2}</div>
+      </div>
+      <div class="divider"></div>
+      <div class="detail-block">
+        <div class="k">Descripción</div>
+        <div class="v">${d.desc}</div>
+      </div>
+      <button class="btn-primary" style="margin-top:6px;">Marcar como completada</button>
+      <div style="height:14px;"></div>
+      <button class="btn-ghost" onclick="goBack()">Volver</button>
+    `;
+    go('detalle');
+  }
+</script>
+</body>
+</html>
