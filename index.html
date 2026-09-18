@@ -72,14 +72,17 @@
     z-index:20;
   }
   .screen{
-    position:absolute;
-    inset:0;
-    display:none;
-    flex-direction:column;
+    display:flex !important;
+    position:relative !important;
+    margin-bottom: 40px;
+    min-height: 750px;
     color:var(--text);
-    animation:fadein .22s ease;
   }
-  .screen.active{ display:flex; }
+  .device{
+    height: auto !important;
+    aspect-ratio: auto !important;
+    overflow: visible !important;
+  }
   @keyframes fadein{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
 
   .statusbar{ height:34px; flex-shrink:0; }
